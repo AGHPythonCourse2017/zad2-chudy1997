@@ -1,4 +1,5 @@
-from multiprocessing import Process,Pipe
+from multiprocessing import Process, Pipe
+
 
 def timeout(fun, time):
     recv_end, send_end = Pipe(False)
@@ -9,6 +10,7 @@ def timeout(fun, time):
         p.terminate()
         print("Timeout, finishing earlier")
 
+    r = []
     while recv_end.poll():
         r = recv_end.recv()
     return r

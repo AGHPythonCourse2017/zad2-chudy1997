@@ -1,11 +1,10 @@
 import math
 import numpy as np
 import time
-import random
 import logging
-from complexity_estimate.Algorythms import *
 from complexity_estimate.UsageException import UsageException
 from complexity_estimate.Timeout import timeout
+
 
 def logger(func):
     logging.info("Running function " + str(func))
@@ -15,22 +14,41 @@ def logger(func):
 class ComplexCalc:
     logging.basicConfig(filename='ComplexCalc.log', level=logging.DEBUG)
     ind = 1
-
     complexities = {'O(logn)': lambda x: math.log2(x),
                     'O(nlogn)': lambda x: x * math.log2(x),
                     'O(n)': lambda x: x,
                     'O(n^2)': lambda x: math.pow(x, 2),
                     'O(n^3)': lambda x: math.pow(x, 3)}
 
-    @staticmethod
-    def w0(x):
-        pass
-
     inverses = {'O(logn)': lambda x: int(math.pow(2, x)),
                 'O(nlogn)': lambda x: x * math.log(2),
                 'O(n)': lambda x: int(x),
                 'O(n^2)': lambda x: int(math.pow(x, 1 / 2)),
                 'O(n^3)': lambda x: int(math.pow(x, 1 / 3))}
+
+    @staticmethod
+    def w0(x):
+        def fun(n): return n * math.log(n, 2) - x
+
+        def deriv(n): return (math.log(n) + 1) / math.log(2)
+        newton_val = x
+        eps = 0.000001
+        while fun(newton_val) / deriv(newton_val) > eps:
+            newton_val = newton_val - (fun(newton_val) / deriv(newton_val))
+        return newton_val
+
+        # def newton_approximate(T, time_info):
+        #     """
+        #        Newton approximation of the equation
+        #        nlogn = (T - B) / A
+        #        for parameter n
+        #    """
+        #     fun = lambda n: n * math.log(n, 2) - ((T - time_info.coeff_2) / time_info.coeff_1)
+        #     deriv = lambda n: (math.log(n) + 1) / math.log(2)
+        #     newton_val = (T - time_info.coeff_2) / time_info.coeff_1
+        #     while (newton_val - (fun(newton_val) / deriv(newton_val))) - newton_val > 1:
+        #         newton_val = newton_val - (fun(newton_val) / deriv(newton_val))
+        #     return int(newton_val)
 
     def __init__(self, func, tab, base=2, min_range=9, max_range=12, max_sec=30):
         self.complexity = None
@@ -55,7 +73,6 @@ class ComplexCalc:
             ran = pow(self.base, self.min_range + i)
             start = time.time()
             self.func(self.tab[1:ran])
-            # times.append([time.time() - start, ran])
             times[i][0] = time.time() - start
             times[i][1] = ran
             send_end.send(times)
@@ -121,57 +138,8 @@ class ComplexCalc:
             if self.complexity != "O(nlogn)":
                 tmp = self.inverses[self.complexity](tim / self.const)
             else:
-                tmp = self.inverses[self.complexity](tim / self.const) / ComplexCalc.w0(math.log(2)*tim / self.const)
+                tmp = ComplexCalc.w0(tim / self.const)
             print("possible size = ", int(tmp))
             return tmp
 
         return res
-
-
-@logger
-def main():
-    try:
-        # tab = [10000 * random.random() for _ in range(int(pow(2, 16)))]
-        # c1 = ComplexCalc(exampleLOGN, tab, 2, 1, 16, 30)
-        # print("\nExampleLOGN: ")
-        # c1.calculate_complexity()
-        # tmp = c1.get_time_foreseer()(100000)
-        # c1.get_size_foreseer()(tmp)
-        #
-        # tab = [10000 * random.random() for _ in range(int(pow(2, 14)))]
-        # c2 = ComplexCalc(exampleN, tab, 2, 1, 14, 30)
-        # print("\nExampleN: ")
-        # c2.calculate_complexity()
-        # tmp = c2.get_time_foreseer()(100000)
-        # c2.get_size_foreseer()(tmp)
-
-        tab = [10000 * random.random() for _ in range(int(pow(2, 12)))]
-        c3 = ComplexCalc(exampleNLOGN, tab, 2, 5, 12, 30)
-        print("\nExampleNLOGN: ")
-        c3.calculate_complexity()
-        tmp = c3.get_time_foreseer()(100)
-        c3.get_size_foreseer()(tmp)
-
-        # tab = [10000 * random.random() for _ in range(int(pow(2, 10)))]
-        # c4 = ComplexCalc(exampleNN, tab, 2, 1, 10, 30)
-        # print("\nExampleNN: ")
-        # c4.calculate_complexity()
-        # tmp = c4.get_time_foreseer()(100000)
-        # c4.get_size_foreseer()(tmp)
-        #
-        # tab = [10000 * random.random() for _ in range(int(pow(2, 8)))]
-        # c5 = ComplexCalc(exampleNNN, tab, 2, 1, 8, 60)
-        # print("\nExampleNNN: ")
-        # c5.calculate_complexity()
-        # tmp = c5.get_time_foreseer()(100000)
-        # c5.get_size_foreseer()(tmp)
-
-    except UsageException as e:
-        print(str(e))
-        exit(-1)
-    except Exception as e:
-        print(str(e))
-
-
-if __name__ == '__main__':
-    main()
