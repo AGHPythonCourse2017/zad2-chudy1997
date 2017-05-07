@@ -37,20 +37,8 @@ class ComplexCalc:
             newton_val = newton_val - (fun(newton_val) / deriv(newton_val))
         return newton_val
 
-        # def newton_approximate(T, time_info):
-        #     """
-        #        Newton approximation of the equation
-        #        nlogn = (T - B) / A
-        #        for parameter n
-        #    """
-        #     fun = lambda n: n * math.log(n, 2) - ((T - time_info.coeff_2) / time_info.coeff_1)
-        #     deriv = lambda n: (math.log(n) + 1) / math.log(2)
-        #     newton_val = (T - time_info.coeff_2) / time_info.coeff_1
-        #     while (newton_val - (fun(newton_val) / deriv(newton_val))) - newton_val > 1:
-        #         newton_val = newton_val - (fun(newton_val) / deriv(newton_val))
-        #     return int(newton_val)
-
-    def __init__(self, func, tab, base=2, min_range=9, max_range=12, max_sec=30):
+    def __init__(self, func, tab, base=2,
+                 min_range=9, max_range=12, max_sec=30):
         self.complexity = None
         self.const = None
         self.func = func
@@ -60,10 +48,10 @@ class ComplexCalc:
         self.max_sec = max_sec
         self.tab = tab
         logging.info(
-            "Call no. " + str(ComplexCalc.ind) + " with args: " + "func=" + func.__name__ + " tab having length=" + str(
-                len(tab)) + " base=" + str(base) + " min_range=" + str(min_range) + " max_range=" + str(
-                max_range) + " timeout=" + str(
-                max_sec))
+            "Call no. " + str(ComplexCalc.ind) + " with args: " + "func=" +
+            func.__name__ + " tab having length=" + str(len(tab)) +
+            " base=" + str(base) + " min_range=" + str(min_range) +
+            " max_range=" + str(max_range) + " timeout=" + str(max_sec))
         ComplexCalc.ind += 1
 
     @logger
@@ -112,8 +100,10 @@ class ComplexCalc:
         def res(n):
             logging.info("Calculating time for size " + str(n))
             if not self.complexity:
-                logging.error("Bad usage: Cannot foresee time before calculating complexity")
-                raise UsageException("Cannot foresee time before calculating complexity")
+                logging.error("Bad usage: Cannot foresee "
+                              "time before calculating complexity")
+                raise UsageException("Cannot foresee "
+                                     "time before calculating complexity")
             print("For size = ", n)
             return time_foresee(n)
 
@@ -129,8 +119,10 @@ class ComplexCalc:
         def res(n):
             logging.info("Calculating size for time " + str(n))
             if not self.complexity:
-                logging.error("Bad usage: Cannot foresee size before calculating complexity")
-                raise UsageException("Cannot foresee size before calculating complexity")
+                logging.error("Bad usage: Cannot foresee "
+                              "size before calculating complexity")
+                raise UsageException("Cannot foresee "
+                                     "size before calculating complexity")
             print("For time = ", n)
             return size_foresee(n)
 
