@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='complexity_estimate',
-      version='0.3',
+      version='1.0',
       description='Project allowing estimating complexity of algorythms '
                   'using lists and time for given size and vice versa.',
       url='https://github.com/AGHPythonCourse2017/zad2-chudy1997',
