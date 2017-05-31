@@ -18,7 +18,6 @@ ComplexCalc
   tab = [10000 * random.random() for _ in range(int(pow(2, 16)))]
   
   def example(a):
-  
     i = 0
     j = 0
     while i < len(a):
