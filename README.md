@@ -24,7 +24,6 @@ ComplexCalc
     j = 0
     
     while i < len(a):
-    
       i = 2 * i + 1
       
       for j in range(1, 100):
