@@ -31,7 +31,7 @@ ComplexCalc
       
           j = (2 * j + 1 - 1) / 2
           
-  return j
+    return j
   
   c1 = ComplexCalc(example, tab, 2, 1, 16, 30)
   
